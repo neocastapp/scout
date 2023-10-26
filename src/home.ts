@@ -6,7 +6,7 @@ const home: Router = Router();
 // API Home
 home.get("/", async (req: Request, res: Response): Promise<any> => {
   try {
-    var title = `BlitzCraftHQ API`;
+    var title = `NeoCast API`;
     res
       .status(200)
       .send(
