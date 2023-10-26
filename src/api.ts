@@ -3,7 +3,7 @@ import * as nocache from "nocache";
 import * as express from "express";
 import * as helmet from "helmet";
 import * as morgan from "morgan";
-import api from "./v2/index";
+import api from "./routes/index";
 import * as errorHandler from "./helpers/errorHandler";
 
 import home from "./home";
