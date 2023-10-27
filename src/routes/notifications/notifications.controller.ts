@@ -35,17 +35,23 @@ export default class NotificationsController {
 
   public GetAllNotificationsByTopicId = async (req: Request, res: Response) => {
     try {
-      console.log(req.params.topic_name);
-      const data = await db
-        .collection("notifications")
-        .find({
-          topic_name: req.params.topic_name,
-        })
-        .toArray();
+      const { ack } = req.query;
+
+      let query: any = { topic_name: req.params.topic_name };
+      if (ack == undefined) {
+        let query: any = { topic_name: req.params.topic_name };
+      } else if (ack == "true") {
+        query = { topic_name: req.params.topic_name, ack: true };
+      } else {
+        query = { topic_name: req.params.topic_name, ack: false };
+      }
+
+      const data = await db.collection("notifications").find(query).toArray();
+
+      console.log(data);
       res.status(200).send({
         success: true,
         data: data,
-        topic_name: req.params.topic_name,
       });
     } catch (err) {
       console.log(err);

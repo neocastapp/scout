@@ -11,9 +11,13 @@ export default class ContractsController {
           topic_data,
         });
 
+        const topic = await db
+          .collection("topics")
+          .findOne({ _id: data.insertedId });
+
         res.status(200).send({
           success: true,
-          data: data,
+          data: topic,
         });
       } catch (e) {
         if (e.code === 11000) {
@@ -36,6 +40,7 @@ export default class ContractsController {
   public GetAllTopics = async (req: Request, res: Response) => {
     try {
       const data = await db.collection("topics").find({}).toArray();
+      console.log(data);
       res.status(200).send({
         success: true,
         data: data,
