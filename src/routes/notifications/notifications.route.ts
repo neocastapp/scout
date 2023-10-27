@@ -10,5 +10,6 @@ notifications.get(
   controller.GetAllNotificationsByTopicId
 );
 notifications.get("/:notificationId", controller.GetNotification);
+notifications.get("/", controller.GetAllNotifications);
 
 export default notifications;
