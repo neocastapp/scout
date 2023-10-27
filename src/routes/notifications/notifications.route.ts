@@ -9,6 +9,7 @@ notifications.get(
   "/topic/:topic_name",
   controller.GetAllNotificationsByTopicId
 );
+notifications.put("/:notificationId", controller.AckNotification);
 notifications.get("/:notificationId", controller.GetNotification);
 
 export default notifications;

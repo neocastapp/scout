@@ -33,6 +33,37 @@ export default class NotificationsController {
     }
   };
 
+  public AckNotification = async (req: Request, res: Response) => {
+    try {
+      const notificationId = req.params.notificationId;
+      const notification = await db
+        .collection("notifications")
+        .findOne({ _id: notificationId });
+
+      if (notification) {
+        const data = await db
+          .collection("notifications")
+          .updateOne({ _id: notificationId }, { $set: { ack: true } });
+
+        res.status(200).send({
+          success: true,
+          data,
+        });
+      } else {
+        res.status(404).send({
+          success: false,
+          reason: "Notification not found",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        message: err.message,
+      });
+    }
+  };
+
   public GetAllNotificationsByTopicId = async (req: Request, res: Response) => {
     try {
       const { ack, filter } = req.query;
@@ -71,7 +102,7 @@ export default class NotificationsController {
       const notificationId = req.params.notificationId;
       const notification = await db
         .collection("notifications")
-        .findOne({ notificationId });
+        .findOne({ _id: notificationId });
 
       if (notification) {
         res.status(200).send({
