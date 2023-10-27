@@ -8,7 +8,7 @@ export default class NotificationsController {
 
       try {
         const data = await db.collection("notifications").insertOne({
-          topic_name: notification_data.topic_name,
+          notification_data,
         });
 
         res.status(200).send({
