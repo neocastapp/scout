@@ -8,7 +8,7 @@ export default class ContractsController {
 
       try {
         const data = await db.collection("topics").insertOne({
-          topic_data,
+          ...topic_data,
         });
 
         const topic = await db
