@@ -51,8 +51,8 @@ export default class ContractsController {
 
   public GetTopic = async (req: Request, res: Response) => {
     try {
-      const topicId = req.params.topicId;
-      const topic = await db.collection("topics").findOne({ topicId });
+      const topic_name = req.params.topic_name;
+      const topic = await db.collection("topics").findOne({ topic_name });
 
       if (topic) {
         res.status(200).send({
@@ -76,14 +76,14 @@ export default class ContractsController {
 
   public UpdateTopic = async (req: Request, res: Response) => {
     try {
-      const topicId = req.params.topicId;
+      const topic_name = req.params.topic_name;
       const topic_data = req.body;
 
       const data = await db
         .collection("topics")
-        .updateOne({ topicId }, { $set: { topic_data } });
+        .updateOne({ topic_name }, { $set: { topic_data } });
 
-      const topic = await db.collection("topics").findOne({ topicId });
+      const topic = await db.collection("topics").findOne({ topic_name });
 
       res.status(200).send({
         success: true,
@@ -100,9 +100,9 @@ export default class ContractsController {
 
   public RemoveTopic = async (req: Request, res: Response) => {
     try {
-      const topicId = req.params.topicId;
+      const topic_name = req.params.topic_name;
 
-      const data = await db.collection("topics").deleteOne({ topicId });
+      const data = await db.collection("topics").deleteOne({ topic_name });
 
       res.status(200).send({
         success: true,

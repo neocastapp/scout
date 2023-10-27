@@ -8,7 +8,7 @@ export default class NotificationsController {
 
       try {
         const data = await db.collection("notifications").insertOne({
-          topicId: notification_data.topicId,
+          topic_name: notification_data.topic_name,
         });
 
         res.status(200).send({
@@ -35,15 +35,17 @@ export default class NotificationsController {
 
   public GetAllNotificationsByTopicId = async (req: Request, res: Response) => {
     try {
+      console.log(req.params.topic_name);
       const data = await db
         .collection("notifications")
         .find({
-          topicId: req.params.topicId,
+          topic_name: req.params.topic_name,
         })
         .toArray();
       res.status(200).send({
         success: true,
         data: data,
+        topic_name: req.params.topic_name,
       });
     } catch (err) {
       console.log(err);
