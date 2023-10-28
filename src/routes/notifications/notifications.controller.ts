@@ -97,6 +97,33 @@ export default class NotificationsController {
     }
   };
 
+  public GetAllNotifications = async (req: Request, res: Response) => {
+    try {
+      const notifications = await db
+        .collection("notifications")
+        .find({})
+        .toArray();
+
+      if (notifications) {
+        res.status(200).send({
+          success: true,
+          data: notifications,
+        });
+      } else {
+        res.status(404).send({
+          success: false,
+          reason: "Notifications not found",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        message: err.message,
+      });
+    }
+  };
+
   public GetNotification = async (req: Request, res: Response) => {
     try {
       const notificationId = req.params.notificationId;

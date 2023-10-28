@@ -11,5 +11,6 @@ notifications.get(
 );
 notifications.put("/:notificationId", controller.AckNotification);
 notifications.get("/:notificationId", controller.GetNotification);
+notifications.get("/", controller.GetAllNotifications);
 
 export default notifications;
