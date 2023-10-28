@@ -16,75 +16,36 @@ export default class Controller {
         .collection("topics")
         .findOne({ topic_name: topic_name });
 
-      switch (topic.action.action) {
-        case "callDiscordWebhook":
-          // Send out a smexy Discord webhook notification
-          fetch(topic.webhookURL, {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: "NeoCast Notifications",
-              avatar_url:
-                "https://raw.githubusercontent.com/neocastapp/brand/main/512x512_color.png",
-              content: "",
-              embeds: [
-                {
-                  color: 58777,
-                  author: {
-                    name: "Neocast Notifications",
-                    url: "https://neocast.xyz/",
-                    icon_url:
-                      "https://raw.githubusercontent.com/neocastapp/brand/main/512x512_color.png",
-                  },
-                  title: topic.topic_name,
-                  url: topic.websiteURL,
-                  description: notification.message,
-                },
-              ],
-            }),
-          });
-
-          res.status(200).json({ success: true });
-          break;
-
-        case "sendEmail":
-          // Send out an email using Brevo
-          const options = {
-            method: "POST",
-            url: "https://api.brevo.com/v3/contacts",
-            headers: {
-              accept: "application/json",
-              "content-type": "application/json",
-              "api-key": process.env.NEXT_PUBLIC_BREVO_API_KEY,
-            },
-            data: {
-              attributes: {
-                EMAIL: req.query.email,
+      axios.post(
+        topic.webhookURL,
+        {
+          username: "NeoCast Notifications",
+          avatar_url:
+            "https://raw.githubusercontent.com/neocastapp/brand/main/512x512_color.png",
+          content: "",
+          embeds: [
+            {
+              color: 58777,
+              author: {
+                name: "Neocast Notifications",
+                url: "https://neocast.xyz/",
+                icon_url:
+                  "https://raw.githubusercontent.com/neocastapp/brand/main/512x512_color.png",
               },
-              updateEnabled: false,
-              email: req.query.email,
-              listIds: [7],
+              title: topic.topic_name,
+              url: topic.websiteURL,
+              description: notification?.message || notification?.eventname,
             },
-          };
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-          axios
-            .request(options)
-            .then(function (response) {
-              console.log(response.data);
-              if ("id" in response.data) {
-                console.log("success");
-              }
-            })
-            .catch(function (error) {
-              console.error(error.response.data.code);
-              if (error.response.data.code === "duplicate_parameter") {
-                console.log("Already exists");
-              }
-            });
-          break;
-      }
+      res.status(200).json({ success: true });
 
       try {
         res.status(200).send({
