@@ -121,4 +121,35 @@ export default class ContractsController {
       });
     }
   };
+
+  public SubscribeToTopic = async (req: Request, res: Response) => {
+    try {
+      const topic_name = req.params.topic_name;
+      const { wallet } = req.body;
+
+      const topic = await db.collection("topics").findOne({ topic_name });
+
+      if (topic) {
+        const data = await db
+          .collection("subscriptions")
+          .insertOne({ topic_name, wallet });
+
+        res.status(200).send({
+          success: true,
+          data,
+        });
+      } else {
+        res.status(404).send({
+          success: false,
+          reason: "Topic not found",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        message: err.message,
+      });
+    }
+  };
 }
