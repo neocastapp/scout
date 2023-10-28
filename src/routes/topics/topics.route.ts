@@ -10,5 +10,6 @@ topics.get("/:topic_name", controller.GetTopic);
 topics.put("/:topic_name", controller.UpdateTopic);
 topics.delete("/:topic_name", controller.RemoveTopic);
 topics.put("/:topic_name/subscribe", controller.SubscribeToTopic);
+topics.put("/:topic_name/unsubscribe", controller.UnsubscribeToTopic);
 
 export default topics;
