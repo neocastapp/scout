@@ -65,4 +65,42 @@ export default class ContractsController {
       });
     }
   };
+  public GetSubscriptionsByWallet = async (req: Request, res: Response) => {
+    try {
+      const data = await db
+        .collection("subscriptions")
+        .aggregate([
+          {
+            $match: {
+              wallet: req.params.wallet,
+            },
+          },
+          {
+            $lookup: {
+              from: "topics",
+              localField: "topic_name",
+              foreignField: "topic_name",
+              as: "topic",
+            },
+          },
+          {
+            $unwind: {
+              path: "$topic",
+            },
+          },
+        ])
+        .toArray();
+      console.log(data);
+      res.status(200).send({
+        success: true,
+        data: data,
+      });
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        message: err.message,
+      });
+    }
+  };
 }
